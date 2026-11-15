@@ -57,6 +57,15 @@ jobs:
           # PR merge refs cannot share their newly created caches with main. Since
           # this matrix is large, only main is allowed to persist Bundler caches.
           bundler-cache: ${{ github.event_name == 'push' }}
+      - name: Cache Bundler dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-${{ matrix.ruby }}-${{ matrix.gemfile }}-${{ hashFiles(matrix.gemfile) }}
+          restore-keys: |
+            ${{ runner.os }}-gems-${{ matrix.ruby }}-${{ matrix.gemfile }}-
+            ${{ runner.os }}-gems-${{ matrix.ruby }}-
+            ${{ runner.os }}-gems-
       - name: Install dependencies without a persistent cache
         if: github.event_name == 'pull_request'
         run: bundle install --jobs 4 --retry 3
@@ -87,6 +96,15 @@ jobs:
         with:
           ruby-version: 3.1
           bundler-cache: ${{ github.event_name == 'push' }}
+      - name: Cache Bundler dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-3.1-Gemfile-${{ hashFiles('Gemfile') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-3.1-Gemfile-
+            ${{ runner.os }}-gems-3.1-
+            ${{ runner.os }}-gems-
       - name: Install dependencies without a persistent cache
         if: github.event_name == 'pull_request'
         run: bundle install --jobs 4 --retry 3
@@ -123,6 +141,15 @@ jobs:
         with:
           ruby-version: "3.4"
           bundler-cache: ${{ github.event_name == 'push' }}
+      - name: Cache Bundler dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-3.4-Gemfile-${{ hashFiles('Gemfile') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-3.4-Gemfile-
+            ${{ runner.os }}-gems-3.4-
+            ${{ runner.os }}-gems-
       - name: Install dependencies without a persistent cache
         if: github.event_name == 'pull_request'
         run: bundle install --jobs 4 --retry 3
@@ -152,6 +179,15 @@ jobs:
       - uses: ruby/setup-ruby@v1
         with:
           ruby-version: "3.4"
+      - name: Cache Bundler dependencies
+        uses: actions/cache@v4
+        with:
+          path: vendor/bundle
+          key: ${{ runner.os }}-gems-3.4-Gemfile-${{ hashFiles('Gemfile') }}
+          restore-keys: |
+            ${{ runner.os }}-gems-3.4-Gemfile-
+            ${{ runner.os }}-gems-3.4-
+            ${{ runner.os }}-gems-
       - name: Install dependencies without a persistent cache
         run: bundle install --jobs 4 --retry 3
       - run: bundle exec rake test:all
